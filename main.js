@@ -3,6 +3,7 @@ var csv_reader = require('csv-stream');
 var fs = require('fs');
 
 const csvStream_writer = csv_writer.format({ headers: true });
+
 csvStream_writer.pipe(process.stdout).on('end', () => process.exit());
 
 
@@ -33,13 +34,17 @@ input_stream.pipe(csvStream_reader)
        var input_table_array= input_table_array_string.split(",")
        if(!table_is_valid(input_table_array))
        {
-        console.log(false);
+        var empty_array=['['+']'];
+        csvStream_writer.write({ id: data.id, json: empty_array , is_valid: 'false'});
        }
        else
        {
-        console.log(true);
+        csvStream_writer.write({ id: data.id, json: '['+rotateTable(input_table_array)+']' , is_valid: 'true'});
        }
        
+    })
+    .on('EOF',function(EOF){
+        csvStream_writer.end();
     })
     
 
