@@ -1,6 +1,59 @@
 function rotateTable(input_table_array)
 {
-   return split_rows(input_table_array)
+    var edge=Math.sqrt(input_table_array.length); // number of column and rows
+    var top = 0;
+    var bottom = edge-1;
+    var left = 0;
+    var right = edge-1;
+    var curr,prev;
+    var splited_rows= split_rows(input_table_array)
+    while ((left < right) & (top < bottom))
+        {
+        // Store the first element of next row,
+        // this element will replace first element of
+        // current row
+        prev = splited_rows[top+1][left];
+ 
+        // Move elements of top row one step right
+        for (var i=left;i<right+1;i++)
+        {
+            curr = splited_rows[top][i];
+            splited_rows[top][i] = prev;
+            prev = curr;
+        }
+ 
+        top++;
+ 
+        // Move elements of rightmost column one step downwards
+        for (var i=top;i<bottom+1;i++)
+        {
+            curr = splited_rows[i][right];
+            splited_rows[i][right] = prev;
+            prev = curr;
+        }
+        right--;
+ 
+        // Move elements of bottom row one step left
+        for (var i=right;i>left-1;i--)
+        {
+            curr = splited_rows[bottom][i];
+            splited_rows[bottom][i] = prev;
+            prev = curr;
+        }
+        bottom--;
+ 
+        // Move elements of leftmost column one step upwards
+        for(var i=bottom;i> top-1;i--)
+        { 
+            curr = splited_rows[i][left];
+            splited_rows[i][left] = prev;
+            prev = curr;
+        }
+ 
+        left++;
+        }
+
+   return splited_rows;
 }
 
 function table_is_valid(input_table_array)
@@ -41,4 +94,4 @@ function split_rows(input_table_array)
    return splited_rows
 }
 
-console.log(rotateTable([1,2,3,4,5,6,'j',8,9,10,11,12,13,14,15,16]))
+console.log(rotateTable([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,'']))
