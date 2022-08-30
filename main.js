@@ -1,34 +1,47 @@
-const csv = require('fast-csv');
+const csv_writer = require('fast-csv');
 var csv_reader = require('csv-stream');
 var fs = require('fs');
 
-const csvStream = csv.format({ headers: true });
-var stream = fs.createReadStream('input.csv');
+const csvStream_writer = csv_writer.format({ headers: true });
+csvStream_writer.pipe(process.stdout).on('end', () => process.exit());
+
+
 var options = {
-    delimiter : '\t', // default is ,
+    delimiter : ',', // default is ,
     endLine : '\n', // default is \n,
     columns : ['id', 'json'], // by default read the first line and use values found as columns
-    columnOffset : 2, // default is 0
+    columnOffset : 1, // default is 0
     escapeChar : '"', // default is an empty string
     enclosedChar : '"' // default is an empty string
 }
 var csvStream_reader = csv_reader.createStream(options);
 
-stream.pipe(csvStream_reader)
+
+var input_stream = fs.createReadStream(process.argv[2]);
+
+
+
+input_stream.pipe(csvStream_reader)
     .on('error',function(err){
-        //console.error(err);
+        console.error(err);
     })
-    .on('header', function(columns) {
-        //console.log(columns);
-    })
+    
     .on('data',function(data){
-        // outputs an object containing a set of key/value pair representing a line found in the csv file.
-        console.log(data);
+       // outputs an object containing a set of key/value pair representing a line found in the csv file.
+       var input_table_array_string=data.json.replace('[','');
+       input_table_array_string=input_table_array_string.replace(']','');
+       var input_table_array= input_table_array_string.split(",")
+       if(!table_is_valid(input_table_array))
+       {
+        console.log(false);
+       }
+       else
+       {
+        console.log(true);
+       }
+       
     })
-    .on('column',function(key,value){
-        // outputs the column name associated with the value found
-       // console.log('#' + key + ' = ' + value);
-    })
+    
 
 function rotateTable(input_table_array)
 {
@@ -127,4 +140,4 @@ function split_rows(input_table_array)
    return splited_rows
 }
 
-console.log(rotateTable([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,'']))
+//console.log(rotateTable([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,'']))
