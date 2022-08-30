@@ -18,8 +18,16 @@ var options = {
 };
 var csvStream_reader = csv_reader.createStream(options);
 ////////////////////////////////////
+if(process.argv.length==3)
+{
+var input_stream = fs.createReadStream(process.argv[2]); // open file from 
+}
+else
+{
+    console.log("invalid file name!");
+    process. exit();
+}
 
-var input_stream = fs.createReadStream(process.argv[2]); // open file from argv
 
 
 
@@ -145,4 +153,6 @@ function split_rows(input_table_array)
    }
    return splited_rows;
 }
+
+
 
