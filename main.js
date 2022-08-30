@@ -2,7 +2,8 @@ const csv_writer = require('fast-csv');
 var csv_reader = require('csv-stream');
 var fs = require('fs');
 
-const csvStream_writer = csv_writer.format({ headers: true });
+/////////////////// initialization
+const csvStream_writer = csv_writer.format({ headers: true});
 
 csvStream_writer.pipe(process.stdout).on('end', () => process.exit());
 
@@ -14,11 +15,11 @@ var options = {
     columnOffset : 1, // default is 0
     escapeChar : '"', // default is an empty string
     enclosedChar : '"' // default is an empty string
-}
+};
 var csvStream_reader = csv_reader.createStream(options);
+////////////////////////////////////
 
-
-var input_stream = fs.createReadStream(process.argv[2]);
+var input_stream = fs.createReadStream(process.argv[2]); // open file from argv
 
 
 
@@ -31,11 +32,11 @@ input_stream.pipe(csvStream_reader)
        // outputs an object containing a set of key/value pair representing a line found in the csv file.
        var input_table_array_string=data.json.replace('[','');
        input_table_array_string=input_table_array_string.replace(']','');
-       var input_table_array= input_table_array_string.split(",")
+       var input_table_array= input_table_array_string.split(","); // convert the table from string to array. 
        if(!table_is_valid(input_table_array))
        {
-        var empty_array=['['+']'];
-        csvStream_writer.write({ id: data.id, json: empty_array , is_valid: 'false'});
+        
+        csvStream_writer.write({ id: data.id, json: '[]' , is_valid: 'false'});
        }
        else
        {
@@ -43,9 +44,9 @@ input_stream.pipe(csvStream_reader)
        }
        
     })
-    .on('EOF',function(EOF){
+    .on('EOF',function(EOF){ // when stream reaches to end of file, it will be closed.
         csvStream_writer.end();
-    })
+    });
     
 
 function rotateTable(input_table_array)
@@ -57,7 +58,7 @@ function rotateTable(input_table_array)
     var left = 0;
     var right = edge-1;
     var curr,prev;
-    var splited_rows= split_rows(input_table_array)
+    var splited_rows= split_rows(input_table_array);
     while ((left < right) & (top < bottom))
         {
         // Store the first element of next row,
@@ -104,7 +105,7 @@ function rotateTable(input_table_array)
         left++;
         }
 
-   return  splited_rows.flat();
+   return  splited_rows.flat(); // convert 2D array to 1D
 }
 
 function table_is_valid(input_table_array)
@@ -142,7 +143,6 @@ function split_rows(input_table_array)
       }
 
    }
-   return splited_rows
+   return splited_rows;
 }
 
-//console.log(rotateTable([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,'']))
