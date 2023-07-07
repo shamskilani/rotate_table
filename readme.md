@@ -17,17 +17,18 @@ The rotation operation involves rotating the table elements in a clockwise direc
 ## Installation
 
 1. Clone the repository:
-
+```
 $ git clone https://github.com/your-username/csv-table-rotator.git
+```
 
 2. Navigate to the project directory:
-
+```
 $ cd csv-table-rotator
-
+```
 3. Install the dependencies:
-
+```
 $ npm install
-
+```
 ## Usage
 
 1. Ensure you have a CSV file with a table that you want to rotate. The table should be in a comma-separated format.
@@ -35,6 +36,9 @@ $ npm install
 2. Open the `index.js` file and modify the `inputFilePath` variable to specify the path to your input CSV file.
 
 3. Run the script with the following command:
+```
 
 $ node index.js
+
+```
 
